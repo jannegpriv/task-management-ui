@@ -21,23 +21,32 @@ import { Task, TaskStatus, SortConfig, SortField } from '../types/Task';
 import { api } from '../services/api';
 import { EditTaskModal } from './EditTaskModal';
 
-export const TaskList = React.memo(() => {
+interface TaskListProps {
+    refreshTrigger?: number;
+}
+
+export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {
     const theme = useTheme();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
-    const [sortConfig, setSortConfig] = useState<SortConfig | null>(null);
+    const [sortConfig, setSortConfig] = useState<SortConfig>({
+        field: 'created_at',
+        order: 'desc'
+    });
 
     const loadTasks = useCallback(async () => {
         try {
+            console.log('Loading tasks...', { refreshTrigger, sortConfig }); // Debug log
             const fetchedTasks = await api.getTasks(sortConfig);
+            console.log('Fetched tasks:', fetchedTasks); // Debug log
             setTasks(fetchedTasks);
             setError(null);
         } catch (err) {
-            setError('Failed to load tasks. Please try again later.');
             console.error('Error loading tasks:', err);
+            setError('Failed to load tasks. Please try again later.');
         }
-    }, [sortConfig]);
+    }, [sortConfig, refreshTrigger]); // Add refreshTrigger to dependencies
 
     useEffect(() => {
         loadTasks();
@@ -78,18 +87,11 @@ export const TaskList = React.memo(() => {
     const handleSortFieldChange = (event: any) => {
         setSortConfig({
             field: event.target.value,
-            order: sortConfig?.order || 'asc'
+            order: sortConfig.order
         });
     };
 
     const toggleSortOrder = () => {
-        if (!sortConfig) {
-            setSortConfig({
-                field: 'status',
-                order: 'asc'
-            });
-            return;
-        }
         setSortConfig({
             ...sortConfig,
             order: sortConfig.order === 'asc' ? 'desc' : 'asc'
@@ -131,7 +133,7 @@ export const TaskList = React.memo(() => {
                     <FormControl sx={{ minWidth: 200 }}>
                         <InputLabel>Sort By</InputLabel>
                         <Select
-                            value={sortConfig?.field}
+                            value={sortConfig.field}
                             label="Sort By"
                             onChange={handleSortFieldChange}
                         >
@@ -141,11 +143,11 @@ export const TaskList = React.memo(() => {
                             <MenuItem value="title">Title</MenuItem>
                         </Select>
                     </FormControl>
-                    <IconButton onClick={toggleSortOrder} title={`Sort ${sortConfig?.order === 'asc' ? 'Ascending' : 'Descending'}`}>
-                        <SwapVertIcon sx={{ transform: sortConfig?.order === 'desc' ? 'rotate(180deg)' : 'none' }} />
+                    <IconButton onClick={toggleSortOrder} title={`Sort ${sortConfig.order === 'asc' ? 'Ascending' : 'Descending'}`}>
+                        <SwapVertIcon sx={{ transform: sortConfig.order === 'desc' ? 'rotate(180deg)' : 'none' }} />
                     </IconButton>
                     <Typography variant="body2" color="textSecondary">
-                        Sorting by {getSortFieldLabel(sortConfig?.field)} ({sortConfig?.order === 'asc' ? 'ascending' : 'descending'})
+                        Sorting by {getSortFieldLabel(sortConfig.field)} ({sortConfig.order === 'asc' ? 'ascending' : 'descending'})
                     </Typography>
                 </Stack>
 

@@ -26,11 +26,17 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
                 status,
             };
 
-            await api.createTask(newTask);
+            console.log('Creating task...', newTask);
+            const createdTask = await api.createTask(newTask);
+            console.log('Task created:', createdTask);
+            
             setTitle('');
             setDescription('');
             setStatus(TaskStatus.TODO);
+            
+            console.log('Calling onTaskCreated callback...');
             onTaskCreated?.();
+            console.log('Callback called');
         } catch (err) {
             setError('Failed to create task. Please try again.');
             console.error('Error creating task:', err);
