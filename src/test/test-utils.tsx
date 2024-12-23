@@ -24,8 +24,8 @@ function render(ui: React.ReactElement, { theme = createTheme(), ...options } = 
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 }
 
-// Export commonly used testing utilities
-export { screen, fireEvent, waitFor } from '@testing-library/react';
-
 // Export our custom render method
 export { render };
+
+// Re-export testing utilities
+export { screen, fireEvent, waitFor } from '@testing-library/react';
