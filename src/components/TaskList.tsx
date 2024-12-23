@@ -23,10 +23,10 @@ import { api } from '../services/api';
 import { EditTaskModal } from './EditTaskModal';
 
 interface TaskListProps {
-    refreshTrigger?: number;
+    refreshTrigger: number;
 }
 
-export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {
+export const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
     const theme = useTheme();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [error, setError] = useState<string | null>(null);

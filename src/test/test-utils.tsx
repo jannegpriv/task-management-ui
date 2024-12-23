@@ -1,5 +1,5 @@
 import React from 'react';
-import { render as rtlRender, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render as rtlRender } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
@@ -24,8 +24,8 @@ function render(ui: React.ReactElement, { theme = createTheme(), ...options } = 
   return rtlRender(ui, { wrapper: Wrapper, ...options });
 }
 
-// Export named items from testing-library
-export { screen, fireEvent, waitFor } from '@testing-library/react';
+// Re-export everything from testing-library except render
+export * from '@testing-library/react';
 
 // Export our custom render method
 export { render };
