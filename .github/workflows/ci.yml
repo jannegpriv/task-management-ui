@@ -31,7 +31,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run ESLint
-        run: npm run lint
+        run: npm run lint --fix --cache
 
       - name: Check TypeScript compilation
         run: npm run type-check
