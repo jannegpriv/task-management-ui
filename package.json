@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint src --ext .ts,.tsx",
+    "lint": "eslint . \"src/**/*.{ts,tsx}\"",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "test": "vitest run --coverage",
