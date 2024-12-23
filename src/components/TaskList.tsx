@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import {
     List,
     ListItem,
@@ -26,7 +27,7 @@ interface TaskListProps {
     refreshTrigger: number;
 }
 
-export const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
+const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
     const theme = useTheme();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -240,6 +241,10 @@ export const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
         </Paper>
     );
 });
+
+TaskList.propTypes = {
+    refreshTrigger: PropTypes.number.isRequired,
+};
 
 TaskList.displayName = 'TaskList';
 
