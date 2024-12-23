@@ -33,7 +33,7 @@ describe('TaskForm', () => {
     };
     
     const mockCreateTask = vi.fn().mockResolvedValue(mockTask);
-    (api.createTask as jest.Mock).mockImplementation(mockCreateTask);
+    (api.createTask as ReturnType<typeof vi.fn>).mockImplementation(mockCreateTask);
 
     const onTaskCreated = vi.fn();
     render(<TaskForm onTaskCreated={onTaskCreated} />);
@@ -66,9 +66,10 @@ describe('TaskForm', () => {
 
   it('shows error message when submission fails', async () => {
     const mockError = new Error('Failed to create task');
-    (api.createTask as jest.Mock).mockRejectedValue(mockError);
+    (api.createTask as ReturnType<typeof vi.fn>).mockRejectedValue(mockError);
 
-    render(<TaskForm />);
+    const onTaskCreated = vi.fn();
+    render(<TaskForm onTaskCreated={onTaskCreated} />);
 
     // Fill in the form
     fireEvent.change(screen.getByLabelText(/title/i), {

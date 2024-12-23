@@ -27,7 +27,7 @@ interface TaskListProps {
     refreshTrigger: number;
 }
 
-const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
+export const TaskList: React.FC<TaskListProps> = React.memo(({ refreshTrigger }) => {
     const theme = useTheme();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -202,42 +202,38 @@ const TaskList = React.memo<TaskListProps>(({ refreshTrigger }) => {
                                 </Stack>
                             }
                         >
-                            <Stack spacing={1} sx={{ width: '100%', pr: 12 }}>
-                                <Stack direction="row" spacing={2} alignItems="center">
-                                    <Typography variant="h6" component="div">
-                                        {task.title}
-                                    </Typography>
-                                    <Chip
-                                        label={task.status.replace('_', ' ')}
+                            <Stack spacing={1}>
+                                <Typography variant="subtitle1">
+                                    {task.title}
+                                </Typography>
+                                <Stack direction="row" spacing={1} alignItems="center">
+                                    <Chip 
+                                        label={task.status} 
                                         color={getStatusColor(task.status)}
                                         size="small"
-                                        sx={{
-                                            '& .MuiChip-label': {
-                                                color: theme.palette.mode === 'dark' ? 'inherit' : undefined,
-                                            },
-                                        }}
                                     />
-                                </Stack>
-                                {task.description && (
                                     <Typography variant="body2" color="textSecondary">
-                                        {task.description}
+                                        Created: {new Date(task.created_at).toLocaleDateString()}
                                     </Typography>
-                                )}
-                                <Typography variant="caption" color="textSecondary">
-                                    Last updated: {new Date(task.updated_at).toLocaleString()}
-                                </Typography>
+                                    {task.updated_at && (
+                                        <Typography variant="body2" color="textSecondary">
+                                            Updated: {new Date(task.updated_at).toLocaleDateString()}
+                                        </Typography>
+                                    )}
+                                </Stack>
                             </Stack>
                         </ListItem>
                     ))}
                 </List>
             </Stack>
 
-            <EditTaskModal
-                task={editingTask}
-                onClose={handleCloseEdit}
-                onTaskUpdated={loadTasks}
-                open={editingTask !== null}
-            />
+            {editingTask && (
+                <EditTaskModal
+                    task={editingTask}
+                    onClose={handleCloseEdit}
+                    onTaskUpdated={loadTasks}
+                />
+            )}
         </Paper>
     );
 });
@@ -246,6 +242,5 @@ TaskList.propTypes = {
     refreshTrigger: PropTypes.number.isRequired,
 };
 
+// Add display name for debugging
 TaskList.displayName = 'TaskList';
-
-export default TaskList;
