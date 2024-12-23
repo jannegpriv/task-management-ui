@@ -232,6 +232,7 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ refreshTrigger })
                     task={editingTask}
                     onClose={handleCloseEdit}
                     onTaskUpdated={loadTasks}
+                    open={Boolean(editingTask)}
                 />
             )}
         </Paper>
