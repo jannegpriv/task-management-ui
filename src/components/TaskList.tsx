@@ -23,7 +23,7 @@ import { api } from '../services/api';
 import { EditTaskModal } from './EditTaskModal';
 
 interface TaskListProps {
-    refreshTrigger: number;
+    refreshTrigger?: number;
 }
 
 export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {

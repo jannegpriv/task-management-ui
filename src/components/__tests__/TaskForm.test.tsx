@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../../test/test-utils';
 import { TaskForm } from '../TaskForm';
 import { api } from '../../services/api';
+import { Task, TaskStatus } from '../../types/Task';
 
 // Mock the API
 vi.mock('../../services/api', () => ({
@@ -12,7 +13,8 @@ vi.mock('../../services/api', () => ({
 
 describe('TaskForm', () => {
   it('renders all form fields', () => {
-    render(<TaskForm />);
+    const onTaskCreated = vi.fn();
+    render(<TaskForm onTaskCreated={onTaskCreated} />);
     
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
@@ -21,15 +23,17 @@ describe('TaskForm', () => {
   });
 
   it('submits form with correct data', async () => {
-    const mockCreateTask = vi.fn().mockResolvedValue({
+    const mockTask: Task = {
       id: 1,
       title: 'Test Task',
       description: 'Test Description',
-      status: 'TODO',
+      status: TaskStatus.TODO,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    });
-    (api.createTask as any).mockImplementation(mockCreateTask);
+    };
+    
+    const mockCreateTask = vi.fn().mockResolvedValue(mockTask);
+    (api.createTask as jest.Mock).mockImplementation(mockCreateTask);
 
     const onTaskCreated = vi.fn();
     render(<TaskForm onTaskCreated={onTaskCreated} />);
@@ -50,7 +54,7 @@ describe('TaskForm', () => {
       expect(mockCreateTask).toHaveBeenCalledWith({
         title: 'Test Task',
         description: 'Test Description',
-        status: 'TODO',
+        status: TaskStatus.TODO,
       });
       expect(onTaskCreated).toHaveBeenCalled();
     });
@@ -62,7 +66,7 @@ describe('TaskForm', () => {
 
   it('shows error message when submission fails', async () => {
     const mockError = new Error('Failed to create task');
-    (api.createTask as any).mockRejectedValue(mockError);
+    (api.createTask as jest.Mock).mockRejectedValue(mockError);
 
     render(<TaskForm />);
 
