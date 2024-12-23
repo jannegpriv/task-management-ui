@@ -1,4 +1,3 @@
-/** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
   env: {
@@ -9,30 +8,34 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:react-hooks/recommended',
     'plugin:react/recommended',
-    'plugin:react/jsx-runtime'
+    'plugin:react/jsx-runtime',
+    'plugin:react-hooks/recommended'
   ],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: 2020,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true
     }
   },
-  plugins: ['react-refresh', '@typescript-eslint', 'react'],
-  rules: {
-    'react-refresh/only-export-components': [
-      'warn',
-      { allowConstantExport: true },
-    ],
-    'react/react-in-jsx-scope': 'off'
-  },
+  plugins: [
+    '@typescript-eslint',
+    'react',
+    'react-hooks',
+    'react-refresh'
+  ],
   settings: {
     react: {
       version: 'detect'
     }
+  },
+  rules: {
+    'react/react-in-jsx-scope': 'off',
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true }
+    ]
   }
 }
