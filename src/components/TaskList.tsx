@@ -12,7 +12,8 @@ import {
     FormControl,
     InputLabel,
     Chip,
-    useTheme
+    useTheme,
+    SelectChangeEvent
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,7 +23,7 @@ import { api } from '../services/api';
 import { EditTaskModal } from './EditTaskModal';
 
 interface TaskListProps {
-    refreshTrigger?: number;
+    refreshTrigger: number;
 }
 
 export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {
@@ -84,11 +85,11 @@ export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {
         }
     };
 
-    const handleSortFieldChange = (event: any) => {
-        setSortConfig({
-            field: event.target.value,
-            order: sortConfig.order
-        });
+    const handleSortFieldChange = (event: SelectChangeEvent<SortField>) => {
+        setSortConfig(prev => ({
+            ...prev,
+            field: event.target.value as SortField
+        }));
     };
 
     const toggleSortOrder = () => {
@@ -239,5 +240,7 @@ export const TaskList = React.memo<TaskListProps>(({ refreshTrigger = 0 }) => {
         </Paper>
     );
 });
+
+TaskList.displayName = 'TaskList';
 
 export default TaskList;

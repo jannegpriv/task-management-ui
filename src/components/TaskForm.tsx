@@ -4,10 +4,10 @@ import { Task, TaskStatus } from '../types/Task';
 import { api } from '../services/api';
 
 interface TaskFormProps {
-    onTaskCreated?: () => void;
+    onTaskCreated: () => void;
 }
 
-export const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
+export const TaskForm = ({ onTaskCreated }: TaskFormProps): JSX.Element => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState<string | null>('');
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.TODO);
@@ -35,7 +35,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
             setStatus(TaskStatus.TODO);
             
             console.log('Calling onTaskCreated callback...');
-            onTaskCreated?.();
+            onTaskCreated();
             console.log('Callback called');
         } catch (err) {
             setError('Failed to create task. Please try again.');
