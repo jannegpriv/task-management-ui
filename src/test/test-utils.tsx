@@ -1,5 +1,5 @@
 import React from 'react';
-import { render as rtlRender, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render as rtlRender } from '@testing-library/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
@@ -28,4 +28,5 @@ function render(ui: React.ReactElement, { theme = createTheme(), ...options } = 
 export { render };
 
 // Re-export testing utilities
+export type { RenderResult } from '@testing-library/react';
 export { screen, fireEvent, waitFor } from '@testing-library/react';
