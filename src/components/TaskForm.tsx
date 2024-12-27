@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { Button, TextField, Stack, MenuItem, Typography } from '@mui/material';
 import { Task, TaskStatus } from '../types/Task';
 import { api } from '../services/api';
 
 interface TaskFormProps {
-    onTaskCreated: () => void;
+    refreshTrigger: number;
+    setRefreshTrigger: Dispatch<SetStateAction<number>>;
 }
 
-export const TaskForm = ({ onTaskCreated }: TaskFormProps): JSX.Element => {
+export const TaskForm = ({ refreshTrigger, setRefreshTrigger }: TaskFormProps): JSX.Element => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState<string | null>('');
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.TODO);
@@ -34,9 +35,7 @@ export const TaskForm = ({ onTaskCreated }: TaskFormProps): JSX.Element => {
             setDescription('');
             setStatus(TaskStatus.TODO);
             
-            console.log('Calling onTaskCreated callback...');
-            onTaskCreated();
-            console.log('Callback called');
+            setRefreshTrigger(prev => prev + 1);
         } catch (err) {
             setError('Failed to create task. Please try again.');
             console.error('Error creating task:', err);
