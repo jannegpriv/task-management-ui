@@ -9,10 +9,7 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     cors: true,
-    hmr: {
-      clientPort: 443,
-      path: '/hmr/'
-    },
+    hmr: false, // Disable HMR in production
     watch: {
       usePolling: true
     }
