@@ -4,11 +4,10 @@ import { Task, TaskStatus } from '../types/Task';
 import { api } from '../services/api';
 
 interface TaskFormProps {
-    refreshTrigger: number;
     setRefreshTrigger: Dispatch<SetStateAction<number>>;
 }
 
-export const TaskForm = ({ refreshTrigger, setRefreshTrigger }: TaskFormProps): JSX.Element => {
+export const TaskForm = ({ setRefreshTrigger }: TaskFormProps): JSX.Element => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState<string | null>('');
     const [status, setStatus] = useState<TaskStatus>(TaskStatus.TODO);

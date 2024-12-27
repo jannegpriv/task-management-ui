@@ -80,7 +80,7 @@ function App() {
                   </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                  <TaskForm refreshTrigger={refreshTrigger} setRefreshTrigger={setRefreshTrigger} />
+                  <TaskForm setRefreshTrigger={setRefreshTrigger} />
                 </Grid>
                 <Grid item xs={12}>
                   <TaskList refreshTrigger={refreshTrigger} />
