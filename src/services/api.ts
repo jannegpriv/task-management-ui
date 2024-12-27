@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Task, SortConfig } from '../types/Task';
 
-const baseURL = 'http://localhost:5555';
+const baseURL = '/api';
 
 const axiosInstance = axios.create({
     baseURL,

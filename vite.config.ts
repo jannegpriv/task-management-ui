@@ -10,7 +10,10 @@ export default defineConfig({
     strictPort: true,
     cors: true,
     hmr: {
-      clientPort: 3000
+      protocol: 'wss',
+      host: 'taskm.duckdns.org',
+      port: 443,
+      clientPort: 443
     },
     watch: {
       usePolling: true
