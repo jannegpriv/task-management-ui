@@ -13,8 +13,8 @@ vi.mock('../../services/api', () => ({
 
 describe('TaskForm', () => {
   it('renders all form fields', () => {
-    const onTaskCreated = vi.fn();
-    render(<TaskForm onTaskCreated={onTaskCreated} />);
+    const setRefreshTrigger = vi.fn();
+    render(<TaskForm setRefreshTrigger={setRefreshTrigger} />);
     
     expect(screen.getByLabelText(/title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
@@ -35,8 +35,8 @@ describe('TaskForm', () => {
     const mockCreateTask = vi.fn().mockResolvedValue(mockTask);
     (api.createTask as ReturnType<typeof vi.fn>).mockImplementation(mockCreateTask);
 
-    const onTaskCreated = vi.fn();
-    render(<TaskForm onTaskCreated={onTaskCreated} />);
+    const setRefreshTrigger = vi.fn();
+    render(<TaskForm setRefreshTrigger={setRefreshTrigger} />);
 
     // Fill in the form
     fireEvent.change(screen.getByLabelText(/title/i), {
@@ -56,7 +56,7 @@ describe('TaskForm', () => {
         description: 'Test Description',
         status: TaskStatus.TODO,
       });
-      expect(onTaskCreated).toHaveBeenCalled();
+      expect(setRefreshTrigger).toHaveBeenCalled();
     });
 
     // Form should be reset
@@ -68,8 +68,8 @@ describe('TaskForm', () => {
     const mockError = new Error('Failed to create task');
     (api.createTask as ReturnType<typeof vi.fn>).mockRejectedValue(mockError);
 
-    const onTaskCreated = vi.fn();
-    render(<TaskForm onTaskCreated={onTaskCreated} />);
+    const setRefreshTrigger = vi.fn();
+    render(<TaskForm setRefreshTrigger={setRefreshTrigger} />);
 
     // Fill in the form
     fireEvent.change(screen.getByLabelText(/title/i), {
