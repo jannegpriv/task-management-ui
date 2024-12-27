@@ -22,9 +22,15 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  useEffect(() => {
-    console.log('Refresh trigger changed:', refreshTrigger);
-  }, [refreshTrigger]);
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -40,27 +46,7 @@ function App() {
     loadSettings();
   }, []);
 
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode,
-        },
-        components: {
-          MuiCssBaseline: {
-            styleOverrides: {
-              body: {
-                margin: 0,
-                padding: 0,
-              },
-            },
-          },
-        },
-      }),
-    [mode]
-  );
-
-  const handleModeToggle = async () => {
+  const handleThemeChange = async () => {
     const newMode = mode === 'light' ? 'dark' : 'light';
     setMode(newMode);
     try {
@@ -70,27 +56,33 @@ function App() {
     }
   };
 
-  return loading ? (
-    <CircularProgress />
-  ) : (
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  return (
     <CacheProvider value={cache}>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Box sx={{ flexGrow: 1 }}>
+          <Container>
+            <Box sx={{ flexGrow: 1, mt: 4 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
-                    <IconButton onClick={handleModeToggle} color="inherit">
+                    <IconButton onClick={handleThemeChange} color="inherit">
                       {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                     </IconButton>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <TaskForm onTaskCreated={() => setRefreshTrigger(prev => prev + 1)} />
+                <Grid item xs={12}>
+                  <TaskForm refreshTrigger={refreshTrigger} setRefreshTrigger={setRefreshTrigger} />
                 </Grid>
-                <Grid item xs={12} md={8}>
+                <Grid item xs={12}>
                   <TaskList refreshTrigger={refreshTrigger} />
                 </Grid>
               </Grid>
