@@ -21,6 +21,9 @@ FROM nginx:alpine
 # Copy the built files from the builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Make sure the mime.types file is present
+COPY --from=nginx:alpine /etc/nginx/mime.types /etc/nginx/mime.types
+
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
