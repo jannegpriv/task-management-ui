@@ -70,7 +70,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container>
-            <Box sx={{ flexGrow: 1, mt: 4 }}>
+            <Box sx={{ flexGrow: 1, pt: 2 }}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
