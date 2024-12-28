@@ -73,16 +73,28 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ refreshTrigger })
         setEditingTask(null);
     };
 
-    const getStatusColor = (status: TaskStatus): "default" | "primary" | "success" => {
+    const getStatusStyles = (status: TaskStatus) => {
         switch (status) {
             case TaskStatus.TODO:
-                return 'default';
+                return {
+                    bgcolor: 'grey.600',
+                    color: 'white'
+                };
             case TaskStatus.IN_PROGRESS:
-                return 'primary';
+                return {
+                    bgcolor: '#ffd700', // Yellow color
+                    color: 'black' // Black text for better contrast on yellow
+                };
             case TaskStatus.DONE:
-                return 'success';
+                return {
+                    bgcolor: 'success.main',
+                    color: 'white'
+                };
             default:
-                return 'default';
+                return {
+                    bgcolor: 'grey.600',
+                    color: 'white'
+                };
         }
     };
 
@@ -209,8 +221,8 @@ export const TaskList: React.FC<TaskListProps> = React.memo(({ refreshTrigger })
                                 <Stack direction="row" spacing={1} alignItems="center">
                                     <Chip 
                                         label={task.status} 
-                                        color={getStatusColor(task.status)}
                                         size="small"
+                                        sx={getStatusStyles(task.status)}
                                     />
                                     <Typography variant="body2" color="textSecondary">
                                         Created: {new Date(task.created_at).toLocaleDateString()}
