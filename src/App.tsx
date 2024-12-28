@@ -71,7 +71,7 @@ function App() {
           <CssBaseline />
           <Container>
             <Box sx={{ flexGrow: 1, pt: 2 }}>
-              <Grid container spacing={3}>
+              <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
                     <IconButton onClick={handleThemeChange} color="inherit">
@@ -79,13 +79,17 @@ function App() {
                     </IconButton>
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <TaskForm setRefreshTrigger={setRefreshTrigger} />
-                </Grid>
-                <Grid item xs={12} md={8}>
-                  <TaskList refreshTrigger={refreshTrigger} />
-                </Grid>
               </Grid>
+              <Box sx={{ mt: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={4}>
+                    <TaskForm setRefreshTrigger={setRefreshTrigger} />
+                  </Grid>
+                  <Grid item xs={12} md={8}>
+                    <TaskList refreshTrigger={refreshTrigger} />
+                  </Grid>
+                </Grid>
+              </Box>
             </Box>
           </Container>
         </ThemeProvider>
