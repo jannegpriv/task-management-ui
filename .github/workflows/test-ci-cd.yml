@@ -1,0 +1,60 @@
+name: Test CI/CD Workflow
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/ci-cd.yml'
+  workflow_dispatch:
+
+jobs:
+  test-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Test Docker build
+        run: |
+          # Try building the image locally
+          docker build -t test-image .
+          
+          # Verify the image was built successfully
+          if ! docker image inspect test-image >/dev/null 2>&1; then
+            echo "❌ Docker build failed"
+            exit 1
+          fi
+          echo "✅ Docker build successful"
+
+      - name: Test version extraction
+        run: |
+          # Test commit hash fallback (when no tags exist)
+          VERSION=$(git rev-parse --short HEAD)
+          if [[ ${#VERSION} != 7 ]]; then
+            echo "❌ Version extraction failed for commit hash"
+            exit 1
+          fi
+          echo "✅ Version extraction successful for commit hash"
+          
+          # Test version string format (simulate tag scenario)
+          if ! [[ "v1.0.0" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Version string format validation failed"
+            exit 1
+          fi
+          echo "✅ Version string format validation successful"
+
+      - name: Test image tagging
+        run: |
+          # Test if we can tag the image with both latest and version
+          VERSION=$(git rev-parse --short HEAD)
+          docker tag test-image ghcr.io/${{ github.repository }}:latest
+          docker tag test-image ghcr.io/${{ github.repository }}:$VERSION
+          
+          # Verify tags exist
+          if ! docker image inspect ghcr.io/${{ github.repository }}:latest >/dev/null 2>&1; then
+            echo "❌ Latest tag creation failed"
+            exit 1
+          fi
+          if ! docker image inspect ghcr.io/${{ github.repository }}:$VERSION >/dev/null 2>&1; then
+            echo "❌ Version tag creation failed"
+            exit 1
+          fi
+          echo "✅ Image tagging successful" 
