@@ -38,10 +38,8 @@ jobs:
           
       - name: Configure npm
         run: |
-          npm config set fetch-retry-mintimeout 100000
-          npm config set fetch-retry-maxtimeout 600000
           npm config set fetch-retries 5
-          npm config set network-timeout 300000
+          npm config set fetch-retry-factor 2
           
       - name: Install dependencies
         run: |
