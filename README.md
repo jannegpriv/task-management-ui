@@ -56,6 +56,21 @@ docker run -p 80:80 task-management-ui
 
 This service is deployed using GitHub Actions and Kubernetes:
 
+```mermaid
+graph TD
+    A[Developer Push] -->|Push to main/tags| B[GitHub Actions]
+    B --> C1[Run Tests]
+    B --> C2[Lint Check]
+    B --> C3[Type Check]
+    C1 & C2 & C3 --> D[Build React App]
+    D --> E[Build Docker Image]
+    E --> F[Push to GitHub Container Registry]
+    F --> |latest tag| G1[ghcr.io/.../latest]
+    F --> |version tag| G2[ghcr.io/.../v1.x.x]
+    G1 & G2 --> H[Update K8s Manifests]
+    H --> I[Deploy to Kubernetes]
+```
+
 1. Changes pushed to main trigger the CI/CD pipeline
 2. The pipeline:
    - Runs linting and type checks
